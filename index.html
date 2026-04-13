@@ -953,7 +953,7 @@ function validateForm() {
   });
   
   // Validation spécifique pour projet_desc si projet = Oui
-  const hasProjet = document.querySelector('input[name=has_projet"][value=Oui]')?.checked;
+  const hasProjet = document.querySelector('input[name="has_projet"][value="Oui"]')?.checked;
   const projetDesc = document.getElementById('projet-desc');
   if (hasProjet && !projetDesc.value.trim()) {
     projetDesc.classList.add('invalid');

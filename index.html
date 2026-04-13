@@ -207,6 +207,23 @@ body::before {
   color: var(--muted);
   font-style: italic;
 }
+.fg .error {
+  font-size: 11px;
+  color: var(--red);
+  font-weight: 500;
+  display: none;
+}
+.fg input.invalid,
+.fg textarea.invalid,
+.fg select.invalid {
+  border-color: var(--red);
+  background: #fff5f5;
+}
+.fg input.invalid + .error,
+.fg textarea.invalid + .error,
+.fg select.invalid + .error {
+  display: block;
+}
  
 /* ── CHECKBOXES ── */
 .checks-grid {
@@ -229,7 +246,8 @@ body::before {
   background: var(--cream);
 }
 .ck-item:hover { border-color: var(--gold); background: #fff; }
-.ck-item input[type="checkbox"] { display: none; }
+.ck-item input[type="checkbox"],
+.ck-item input[type="radio"] { display: none; }
 .ck-item .ck-box {
   width: 16px; height: 16px;
   border: 2px solid var(--border);
@@ -301,6 +319,12 @@ body::before {
   color: #fff;
 }
 .btn-green:hover { background: #1f8549; transform: translateY(-1px); }
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--gold);
+  color: var(--gold);
+}
+.btn-outline:hover { background: rgba(200,146,42,0.1); }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
  
 /* ── STATUS TOAST ── */
@@ -350,13 +374,53 @@ body::before {
   text-align: center;
 }
  
+/* ── SUCCESS MODAL ── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: var(--card);
+  border-radius: var(--r);
+  padding: 28px;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.modal h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  color: var(--green);
+  margin-bottom: 12px;
+}
+.modal p {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+ 
 /* ═══ PDF / PRINT STYLES ═══ */
 @media print {
   body::before, .header::after { display: none; }
   body { background: #fff; font-size: 11px; }
   .header { padding: 24px 20px; background: #0c0c0c !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .intro, .form-wrap { padding: 0 10px; margin: 0 auto; max-width: 100%; }
-  .submit-area, .btn-row, .toast, .progress-wrap { display: none !important; }
+  .submit-area, .btn-row, .toast, .progress-wrap, .modal-overlay { display: none !important; }
   .section-card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; margin-bottom: 12px; }
   .section-head { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .fg input, .fg select, .fg textarea {
@@ -396,12 +460,6 @@ body::before {
 }
 .footer a { color: var(--gold); text-decoration: none; }
  
-/* ── REQUIRED STAR ANIMATION ── */
-.fg input:invalid:not(:placeholder-shown),
-.fg textarea:invalid:not(:placeholder-shown) {
-  border-color: var(--red);
-}
- 
 /* ── CONDITIONAL SECTION ── */
 .conditional-section {
   display: none;
@@ -428,7 +486,8 @@ body::before {
     <strong>📋 Comment ça marche ?</strong><br>
     Remplissez ce formulaire avec vos informations. Une fois terminé, vous pouvez :<br>
     ① <strong>Télécharger votre fiche en PDF</strong> pour la garder ou la partager,<br>
-    ② <strong>Envoyer vos informations</strong> directement à l'équipe du club — elles seront automatiquement ajoutées à notre annuaire partagé.<br><br>
+    ② <strong>Envoyer vos informations</strong> directement à l'équipe du club — elles seront automatiquement ajoutées à notre annuaire partagé,<br>
+    ③ <strong>Copier un résumé pour WhatsApp</strong> à coller dans le groupe.<br><br>
     <span style="color:var(--red)">*</span> Champs obligatoires · Vos données restent confidentielles au sein du club.
   </div>
 </div>
@@ -449,22 +508,27 @@ body::before {
         <div class="fg">
           <label>Prénom <span class="req">*</span></label>
           <input type="text" id="prenom" placeholder="Votre prénom" required>
+          <span class="error">Ce champ est requis</span>
         </div>
         <div class="fg">
           <label>Nom <span class="req">*</span></label>
           <input type="text" id="nom" placeholder="Votre nom" required>
+          <span class="error">Ce champ est requis</span>
         </div>
         <div class="fg">
           <label>Téléphone <span class="req">*</span></label>
           <input type="tel" id="tel" placeholder="+33 6 XX XX XX XX" required>
+          <span class="error">Ce champ est requis</span>
         </div>
         <div class="fg">
           <label>Email <span class="req">*</span></label>
           <input type="email" id="email" placeholder="prenom.nom@email.com" required>
+          <span class="error">Email invalide</span>
         </div>
         <div class="fg">
           <label>Ville de résidence <span class="req">*</span></label>
           <input type="text" id="ville" placeholder="Paris, Lyon, Marseille..." required>
+          <span class="error">Ce champ est requis</span>
         </div>
         <div class="fg">
           <label>LinkedIn</label>
@@ -496,6 +560,7 @@ body::before {
             <option value="Retraité(e)">Retraité(e)</option>
             <option value="Autre">Autre</option>
           </select>
+          <span class="error">Veuillez sélectionner une option</span>
         </div>
         <div class="fg">
           <label>Secteur d'activité</label>
@@ -521,11 +586,64 @@ body::before {
       <div class="fg" style="margin-top:14px">
         <label>Décrivez votre métier, poste ou entreprise <span class="req">*</span></label>
         <textarea id="metier" placeholder="Ex : Je suis développeur web chez une startup parisienne / Je dirige une épicerie syrienne à Lyon / Je suis étudiante en master de droit international..." required></textarea>
+        <span class="error">Ce champ est requis</span>
       </div>
     </div>
   </div>
  
-  <!-- ── 3. PROJET ENTREPRENEURIAL ── -->
+  <!-- ── 3. DISPONIBILITÉ & ENGAGEMENT ── [NOUVEAU] -->
+  <div class="section-card">
+    <div class="section-head">
+      <span class="ico">🤝</span>
+      <h2>Disponibilité & Engagement</h2>
+      <span class="ar">التوفر والمشاركة</span>
+    </div>
+    <div class="section-body">
+      <div class="fg">
+        <label>Comment souhaitez-vous vous engager dans le club ? <span style="font-weight:400;text-transform:none;letter-spacing:0">(plusieurs choix possibles)</span></label>
+        <div class="checks-grid" style="margin-top:8px">
+          <label class="ck-item" onclick="tglCk(this)">
+            <input type="checkbox" name="dispo" value="Mentorat / Conseil">
+            <span class="ck-box"></span>
+            <span class="ck-ico">🎓</span>
+            <span class="ck-label">Mentorat / Conseil</span>
+          </label>
+          <label class="ck-item" onclick="tglCk(this)">
+            <input type="checkbox" name="dispo" value="Partenariats professionnels">
+            <span class="ck-box"></span>
+            <span class="ck-ico">🤝</span>
+            <span class="ck-label">Partenariats</span>
+          </label>
+          <label class="ck-item" onclick="tglCk(this)">
+            <input type="checkbox" name="dispo" value="Participation aux événements">
+            <span class="ck-box"></span>
+            <span class="ck-ico">🎉</span>
+            <span class="ck-label">Événements</span>
+          </label>
+          <label class="ck-item" onclick="tglCk(this)">
+            <input type="checkbox" name="dispo" value="Partage de ressources / locaux">
+            <span class="ck-box"></span>
+            <span class="ck-ico">🏢</span>
+            <span class="ck-label">Ressources / Locaux</span>
+          </label>
+          <label class="ck-item" onclick="tglCk(this)">
+            <input type="checkbox" name="dispo" value="Mise en relation / Réseau">
+            <span class="ck-box"></span>
+            <span class="ck-ico">🌐</span>
+            <span class="ck-label">Mise en relation</span>
+          </label>
+          <label class="ck-item" onclick="tglCk(this)">
+            <input type="checkbox" name="dispo" value="Autre">
+            <span class="ck-box"></span>
+            <span class="ck-ico">✨</span>
+            <span class="ck-label">Autre</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- ── 4. PROJET ENTREPRENEURIAL ── -->
   <div class="section-card">
     <div class="section-head">
       <span class="ico">🚀</span>
@@ -565,10 +683,10 @@ body::before {
     </div>
   </div>
  
-  <!-- ── 4. BESOINS ── -->
+  <!-- ── 5. BESOINS ── -->
   <div class="section-card" id="section-besoins" style="display:none">
     <div class="section-head">
-      <span class="ico">🤝</span>
+      <span class="ico">🔧</span>
       <h2>Besoins pour mon projet</h2>
       <span class="ar">احتياجات المشروع</span>
     </div>
@@ -633,7 +751,7 @@ body::before {
     </div>
   </div>
  
-  <!-- ── 5. COMMENT AIDER LA COMMUNAUTÉ ── -->
+  <!-- ── 6. COMMENT AIDER LA COMMUNAUTÉ ── -->
   <div class="section-card">
     <div class="section-head">
       <span class="ico">💡</span>
@@ -666,7 +784,10 @@ body::before {
  
     <div class="btn-row">
       <button type="button" class="btn btn-black" onclick="exportPDF()">
-        🖨️ Télécharger en PDF
+        🖨️ PDF
+      </button>
+      <button type="button" class="btn btn-outline" onclick="copyForWhatsApp()">
+        📋 WhatsApp
       </button>
       <button type="button" class="btn btn-gold" id="btn-send" onclick="submitForm()">
         📨 Envoyer au club
@@ -684,6 +805,19 @@ body::before {
 </form>
 </div>
  
+<!-- ══ SUCCESS MODAL ═══════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="success-modal">
+  <div class="modal">
+    <h3>✅ Fiche envoyée avec succès !</h3>
+    <p>Merci <strong id="modal-prenom"></strong> !<br>Vos informations ont été ajoutées à l'annuaire du club.</p>
+    <div class="modal-actions">
+      <button class="btn btn-gold" onclick="exportPDF(); closeModal()">🖨️ Télécharger mon PDF</button>
+      <button class="btn btn-outline" onclick="copyForWhatsApp(); closeModal()">📋 Copier pour WhatsApp</button>
+      <button class="btn btn-black" onclick="closeModal()">Fermer</button>
+    </div>
+  </div>
+</div>
+ 
 <!-- ══ FOOTER ══════════════════════════════════════════════════════════════ -->
 <div class="footer">
   🇸🇾 Club des Syriens · France ·
@@ -698,26 +832,18 @@ body::before {
 <script>
  
 // ═══════════════════════════════════════════════════════════════════════════
-// ⚙️ CONFIGURATION — À MODIFIER UNE SEULE FOIS
+// ⚙️ CONFIGURATION — URL de votre Google Apps Script (MISE À JOUR)
 // ═══════════════════════════════════════════════════════════════════════════
- 
-// 1️⃣  URL de ton Google Apps Script (voir instructions dans le README ci-dessous)
-//     Une fois créé, colle l'URL ici :
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw16U7EP6oneXXMhz1aro63eKt5N9cP2dHvd6LYqr7H3nVhNznt9yS9zHw5C9gm266Tfw/exec';
- 
-// 2️⃣  Email de destination (déjà configuré)
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyxmSqoeKEFFPtBJ3NJ_yMPTBBzOj6KVDczXmfJuuf53O36Rb5UCt_N5eKAWa9U0337ag/exec';
 const ADMIN_EMAIL = 'safwanst.76@gmail.com';
  
-// ═══════════════════════════════════════════════════════════════════════════
- 
-// ── Checkbox toggle ──────────────────────────────────────────────────────
+// ── Checkbox/Radio toggle visual ──────────────────────────────────────────
 function tglCk(label) {
-  const cb = label.querySelector('input[type=checkbox]');
-  // Don't toggle here — let the browser handle it, just update style
   setTimeout(() => {
-    label.classList.toggle('checked', cb.checked);
+    const input = label.querySelector('input');
+    label.classList.toggle('checked', input.checked);
     const box = label.querySelector('.ck-box');
-    if (box) box.style.background = cb.checked ? 'var(--gold)' : '';
+    if (box) box.style.background = input.checked ? 'var(--gold)' : '';
   }, 0);
 }
  
@@ -728,9 +854,8 @@ function toggleProjet(radio) {
   const oui = document.querySelector('input[name=has_projet][value=Oui]');
   const non = document.querySelector('input[name=has_projet][value=Non]');
  
-  // Update radio styling
-  document.getElementById('lbl-projet-oui').classList.toggle('checked', oui.checked);
-  document.getElementById('lbl-projet-non').classList.toggle('checked', non.checked);
+  document.getElementById('lbl-projet-oui').classList.toggle('checked', oui?.checked);
+  document.getElementById('lbl-projet-non').classList.toggle('checked', non?.checked);
   document.querySelectorAll('input[name=has_projet]').forEach(r => {
     const box = r.parentElement.querySelector('.ck-box');
     if (box) box.style.background = r.checked ? 'var(--gold)' : '';
@@ -746,7 +871,7 @@ function toggleProjet(radio) {
   }
 }
  
-// ── Toast ────────────────────────────────────────────────────────────────
+// ── Toast notification ───────────────────────────────────────────────────
 function showToast(msg, type = '') {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -762,10 +887,36 @@ function setProgress(pct, label) {
   document.getElementById('progress-label').textContent = label;
 }
  
+// ── Validation en temps réel ─────────────────────────────────────────────
+function validateField(input) {
+  const value = input.value.trim();
+  const isRequired = input.hasAttribute('required');
+  const isEmail = input.type === 'email';
+  
+  if (!isRequired) return true;
+  if (!value) return false;
+  if (isEmail && !value.includes('@')) return false;
+  return true;
+}
+ 
+function setupRealTimeValidation() {
+  document.querySelectorAll('input[required], textarea[required], select[required]').forEach(field => {
+    field.addEventListener('blur', () => {
+      const valid = validateField(field);
+      field.classList.toggle('invalid', !valid);
+    });
+    field.addEventListener('input', () => {
+      if (field.classList.contains('invalid') && validateField(field)) {
+        field.classList.remove('invalid');
+      }
+    });
+  });
+}
+ 
 // ── Collect form data ─────────────────────────────────────────────────────
 function collectData() {
-  const besoins = [...document.querySelectorAll('input[name=besoin]:checked')]
-    .map(c => c.value).join(', ');
+  const besoins = [...document.querySelectorAll('input[name=besoin]:checked')].map(c => c.value).join(', ');
+  const dispo = [...document.querySelectorAll('input[name=dispo]:checked')].map(c => c.value).join(', ');
   const hasProjet = document.querySelector('input[name=has_projet]:checked')?.value || 'Non renseigné';
  
   return {
@@ -779,6 +930,7 @@ function collectData() {
     situation:     document.getElementById('situation').value,
     secteur:       document.getElementById('secteur').value || '—',
     metier:        document.getElementById('metier').value.trim(),
+    disponibilite: dispo || '—',
     has_projet:    hasProjet,
     projet_nom:    document.getElementById('projet-nom').value.trim() || '—',
     projet_desc:   document.getElementById('projet-desc').value.trim() || '—',
@@ -789,148 +941,180 @@ function collectData() {
   };
 }
  
-// ── Validate ──────────────────────────────────────────────────────────────
-function validate(data) {
-  if (!data.prenom) return 'Prénom manquant';
-  if (!data.nom)    return 'Nom manquant';
-  if (!data.tel)    return 'Téléphone manquant';
-  if (!data.email || !data.email.includes('@')) return 'Email invalide';
-  if (!data.ville)  return 'Ville manquante';
-  if (!data.situation) return 'Veuillez indiquer votre situation professionnelle';
-  if (!data.metier) return 'Veuillez décrire votre métier';
-  return null;
+// ── Validate all required fields ──────────────────────────────────────────
+function validateForm() {
+  let isValid = true;
+  const required = document.querySelectorAll('input[required], textarea[required], select[required]');
+  
+  required.forEach(field => {
+    const valid = validateField(field);
+    field.classList.toggle('invalid', !valid);
+    if (!valid) isValid = false;
+  });
+  
+  // Validation spécifique pour projet_desc si projet = Oui
+  const hasProjet = document.querySelector('input[name=has_projet"][value=Oui]')?.checked;
+  const projetDesc = document.getElementById('projet-desc');
+  if (hasProjet && !projetDesc.value.trim()) {
+    projetDesc.classList.add('invalid');
+    isValid = false;
+  }
+  
+  return isValid;
 }
  
 // ── Export PDF ────────────────────────────────────────────────────────────
 function exportPDF() {
   const data = collectData();
-  const err = validate(data);
-  if (err) { showToast('⚠️ ' + err, 'err'); return; }
- 
+  
   // Update PDF meta
-  document.getElementById('pdf-date').textContent =
-    'Généré le ' + new Date().toLocaleDateString('fr-FR');
- 
+  document.getElementById('pdf-date').textContent = 'Généré le ' + new Date().toLocaleDateString('fr-FR');
+  document.getElementById('pdf-meta').style.display = 'flex';
+  
   showToast('📄 Ouverture de l\'impression…');
-  setTimeout(() => window.print(), 400);
+  setTimeout(() => {
+    window.print();
+    document.getElementById('pdf-meta').style.display = 'none';
+  }, 400);
 }
  
-// ── Submit to Google Sheets + Email ──────────────────────────────────────
-async function submitForm() {
-  const data = collectData();
-  const err = validate(data);
-  if (err) { showToast('⚠️ ' + err, 'err'); return; }
+// ── Copy for WhatsApp ─────────────────────────────────────────────────────
+function copyForWhatsApp() {
+  const d = collectData();
+  const text = `🇸🇾 *FICHE MEMBRE — CLUB DES SYRIENS*
+
+👤 *${d.prenom} ${d.nom}*
+📱 ${d.tel}
+📧 ${d.email}
+📍 ${d.ville}
+🔗 ${d.linkedin !== '—' ? d.linkedin : 'Non renseigné'}
+
+💼 *Profil*
+• Situation : ${d.situation}
+• Secteur : ${d.secteur}
+• ${d.metier}
+
+${d.disponibilite !== '—' ? `🤝 *Engagement* : ${d.disponibilite}\n` : ''}
+${d.has_projet === 'Oui' ? `🚀 *Projet : ${d.projet_nom}*
+${d.projet_desc}\n` : ''}
+${d.besoins !== '—' ? `🔧 *Besoins* : ${d.besoins}\n` : ''}
+💡 *Je peux aider* : ${d.contribution}
+
+${d.message ? `💬 *Message* : ${d.message}` : ''}
+──────────────────
+Formulaire Club des Syriens · France`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('📋 Copié ! Collez dans WhatsApp', 'ok');
+  }).catch(() => {
+    // Fallback pour anciens navigateurs
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('📋 Copié ! Collez dans WhatsApp', 'ok');
+  });
+}
  
+// ── Submit to Google Sheets ──────────────────────────────────────────────
+async function submitForm() {
+  if (!validateForm()) {
+    showToast('⚠️ Veuillez remplir les champs obligatoires', 'err');
+    document.querySelector('.invalid')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+ 
+  const data = collectData();
   const btn = document.getElementById('btn-send');
   btn.disabled = true;
-  btn.textContent = '⏳ Envoi…';
+  btn.innerHTML = '⏳ Envoi…';
  
-  setProgress(20, '① Préparation des données…');
- 
-  // ── Build email body ─────────────────────────────────────────────────
-  const emailBody = buildEmailBody(data);
+  setProgress(20, '① Préparation…');
  
   try {
-    setProgress(50, '② Envoi vers Google Sheets…');
- 
-    // Check if script URL is configured
-    if (GOOGLE_SCRIPT_URL.includes('REMPLACE_PAR')) {
-      // Mode démo : simuler l'envoi
-      await new Promise(r => setTimeout(r, 1500));
-      setProgress(100, '✅ Envoyé ! (mode démo — configurer l\'URL Apps Script)');
-      showToast('✅ Fiche enregistrée ! (mode démo)', 'ok');
-      btn.textContent = '✅ Envoyé !';
-      btn.style.background = 'var(--green)';
- 
-      // Still try to open email client as fallback
-      openMailFallback(data, emailBody);
-      return;
-    }
- 
-    // Real submission
+    setProgress(50, '② Envoi vers le club…');
+    
     const formData = new FormData();
     Object.entries(data).forEach(([k, v]) => formData.append(k, v));
     formData.append('admin_email', ADMIN_EMAIL);
  
-    const res = await fetch(GOOGLE_SCRIPT_URL, {
-      method: 'POST',
-      body: formData,
-    });
+    await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: formData });
  
-    setProgress(90, '③ Confirmation…');
-    await new Promise(r => setTimeout(r, 600));
-    setProgress(100, '✅ Fiche enregistrée avec succès !');
- 
-    showToast('✅ Fiche envoyée et enregistrée dans l\'annuaire !', 'ok');
-    btn.textContent = '✅ Envoyé !';
-    btn.style.background = 'var(--green)';
- 
+    setProgress(100, '✅ Terminé !');
+    
+    // Afficher modal de succès
+    document.getElementById('modal-prenom').textContent = data.prenom;
+    document.getElementById('success-modal').classList.add('show');
+    
   } catch (e) {
     console.error('[Submit]', e);
     setProgress(0, '');
     document.getElementById('progress-wrap').classList.remove('show');
-    showToast('⚠️ Erreur réseau — ouverture de votre messagerie…', 'err');
-    openMailFallback(data, emailBody);
+    showToast('⚠️ Erreur — ouverture de votre messagerie…', 'err');
+    openMailFallback(data);
+  } finally {
     btn.disabled = false;
-    btn.textContent = '📨 Réessayer';
+    btn.innerHTML = '📨 Envoyer au club';
   }
 }
  
-// ── Fallback : ouvrir le client mail ─────────────────────────────────────
-function openMailFallback(data, body) {
-  const subject = encodeURIComponent(
-    `[Club Syriens] Nouvelle fiche membre — ${data.prenom} ${data.nom}`
-  );
-  const bodyEnc = encodeURIComponent(body);
-  const mailto = `mailto:${ADMIN_EMAIL}?subject=${subject}&body=${bodyEnc}`;
-  // mailto has length limits — open in new tab as safety
-  const a = document.createElement('a');
-  a.href = mailto;
-  a.click();
-}
- 
-// ── Build email text body ─────────────────────────────────────────────────
-function buildEmailBody(d) {
-  return `NOUVELLE FICHE MEMBRE — CLUB DES SYRIENS
-Soumise le : ${d.timestamp}
+// ── Fallback email client ─────────────────────────────────────────────────
+function openMailFallback(data) {
+  const body = `NOUVELLE FICHE MEMBRE — CLUB DES SYRIENS
+Soumise le : ${data.timestamp}
 ${'═'.repeat(50)}
- 
+
 👤 IDENTITÉ
-Prénom / Nom  : ${d.prenom} ${d.nom}
-Téléphone     : ${d.tel}
-Email         : ${d.email}
-Ville         : ${d.ville}
-LinkedIn      : ${d.linkedin}
- 
-💼 PROFIL PROFESSIONNEL
-Situation     : ${d.situation}
-Secteur       : ${d.secteur}
-Description   : ${d.metier}
- 
-🚀 PROJET ENTREPRENEURIAL
-A un projet   : ${d.has_projet}
-Nom projet    : ${d.projet_nom}
-Description   : ${d.projet_desc}
- 
+Prénom/Nom : ${data.prenom} ${data.nom}
+Téléphone : ${data.tel}
+Email : ${data.email}
+Ville : ${data.ville}
+LinkedIn : ${data.linkedin}
+
+💼 PROFIL
+Situation : ${data.situation}
+Secteur : ${data.secteur}
+Description : ${data.metier}
+Disponibilité : ${data.disponibilite}
+
+🚀 PROJET
+A un projet : ${data.has_projet}
+Nom : ${data.projet_nom}
+Description : ${data.projet_desc}
+
 🤝 BESOINS
-Types         : ${d.besoins}
-Précisions    : ${d.besoin_detail}
- 
-💡 CONTRIBUTION À LA COMMUNAUTÉ
-Comment aider : ${d.contribution}
- 
+Types : ${data.besoins}
+Précisions : ${data.besoin_detail}
+
+💡 CONTRIBUTION
+${data.contribution}
+
 💬 MESSAGE
-${d.message}
- 
-${'═'.repeat(50)}
-Formulaire · Club des Syriens · France
-`;
+${data.message}`;
+
+  const subject = encodeURIComponent(`[Club Syriens] Nouvelle fiche — ${data.prenom} ${data.nom}`);
+  const bodyEnc = encodeURIComponent(body);
+  window.location.href = `mailto:${ADMIN_EMAIL}?subject=${subject}&body=${bodyEnc}`;
 }
+ 
+// ── Modal functions ───────────────────────────────────────────────────────
+function closeModal() {
+  document.getElementById('success-modal').classList.remove('show');
+}
+ 
+// ── Close modal on outside click ──────────────────────────────────────────
+document.getElementById('success-modal')?.addEventListener('click', (e) => {
+  if (e.target.id === 'success-modal') closeModal();
+});
  
 // ── Init ──────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('pdf-date').textContent =
-    'Généré le ' + new Date().toLocaleDateString('fr-FR');
+  document.getElementById('pdf-date').textContent = 'Généré le ' + new Date().toLocaleDateString('fr-FR');
+  setupRealTimeValidation();
 });
  
 </script>
+</body>
+</html>

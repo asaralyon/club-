@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Club des Syriens · Fiche Membre</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
+ 
+<style>
+/* ═══ VARIABLES ═══ */
+:root {
+  --black: #0c0c0c;
+  --cream: #faf7f2;
+  --warm:  #f3ece0;
+  --gold:  #c8922a;
+  --gold-l:#e8b84b;
+  --gold-d:#a0701a;
+  --green: #1a6b3c;
+  --red:   #c0392b;
+  --text:  #1c1c1c;
+  --muted: #7a7060;
+  --border:#ddd4c0;
+  --card:  #ffffff;
+  --r: 14px;
+  --shadow: 0 6px 32px rgba(0,0,0,0.08);
+}
+ 
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+ 
+/* ── BACKGROUND PATTERN ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(200,146,42,0.07) 0%, transparent 50%),
+    radial-gradient(circle at 80% 90%, rgba(200,146,42,0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+ 
+/* ── HEADER ── */
+.header {
+  background: var(--black);
+  color: #fff;
+  text-align: center;
+  padding: 48px 24px 36px;
+  position: relative;
+  overflow: hidden;
+}
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--gold-d), var(--gold-l), var(--gold-d));
+}
+.header-flag {
+  font-size: 48px;
+  margin-bottom: 12px;
+  display: block;
+  animation: float 4s ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(22px, 5vw, 32px);
+  font-weight: 900;
+  color: var(--gold-l);
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+.header .sub {
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  font-style: italic;
+}
+.header .ar-title {
+  font-family: 'Noto Naskh Arabic', serif;
+  font-size: 16px;
+  color: rgba(255,255,255,0.6);
+  margin-top: 8px;
+  direction: rtl;
+}
+ 
+/* ── INTRO CARD ── */
+.intro {
+  max-width: 720px;
+  margin: 32px auto 0;
+  padding: 0 20px;
+  position: relative;
+  z-index: 1;
+}
+.intro-card {
+  background: var(--card);
+  border-radius: var(--r);
+  padding: 22px 24px;
+  border-left: 4px solid var(--gold);
+  box-shadow: var(--shadow);
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.intro-card strong { color: var(--text); }
+ 
+/* ── FORM WRAPPER ── */
+.form-wrap {
+  max-width: 720px;
+  margin: 24px auto 48px;
+  padding: 0 20px;
+  position: relative;
+  z-index: 1;
+}
+ 
+/* ── SECTION CARD ── */
+.section-card {
+  background: var(--card);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.section-head {
+  background: linear-gradient(135deg, var(--black) 0%, #1e1e1e 100%);
+  padding: 14px 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-head .ico { font-size: 18px; }
+.section-head h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--gold-l);
+}
+.section-head .ar {
+  font-family: 'Noto Naskh Arabic', serif;
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  margin-left: auto;
+  direction: rtl;
+}
+.section-body { padding: 22px; }
+ 
+/* ── FORM GRID ── */
+.fg2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.fg3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+@media (max-width: 600px) { .fg2, .fg3 { grid-template-columns: 1fr; } }
+ 
+/* ── FORM GROUP ── */
+.fg {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.fg.full { grid-column: 1 / -1; }
+ 
+.fg label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+}
+.fg label .req { color: var(--gold); }
+ 
+.fg input,
+.fg select,
+.fg textarea {
+  padding: 10px 13px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.fg input:focus,
+.fg select:focus,
+.fg textarea:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(200,146,42,0.12);
+  background: #fff;
+}
+.fg textarea {
+  min-height: 90px;
+  resize: vertical;
+  line-height: 1.6;
+}
+.fg .hint {
+  font-size: 11px;
+  color: var(--muted);
+  font-style: italic;
+}
+ 
+/* ── CHECKBOXES ── */
+.checks-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 4px;
+}
+@media (max-width: 500px) { .checks-grid { grid-template-columns: 1fr; } }
+ 
+.ck-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: var(--cream);
+}
+.ck-item:hover { border-color: var(--gold); background: #fff; }
+.ck-item input[type="checkbox"] { display: none; }
+.ck-item .ck-box {
+  width: 16px; height: 16px;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  font-size: 10px;
+  color: #fff;
+}
+.ck-item input:checked + .ck-box {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+.ck-item input:checked + .ck-box::after { content: '✓'; }
+.ck-item.checked { border-color: var(--gold); background: rgba(200,146,42,0.06); }
+.ck-label { font-size: 12px; font-weight: 500; }
+.ck-ico { font-size: 14px; }
+ 
+/* ── SUBMIT AREA ── */
+.submit-area {
+  background: var(--card);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  padding: 28px 22px;
+  text-align: center;
+}
+.submit-area h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  margin-bottom: 6px;
+}
+.submit-area p {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 22px;
+}
+.btn-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn {
+  padding: 12px 24px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-gold {
+  background: var(--gold);
+  color: #fff;
+}
+.btn-gold:hover { background: var(--gold-l); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(200,146,42,0.35); }
+.btn-black {
+  background: var(--black);
+  color: #fff;
+}
+.btn-black:hover { background: #222; transform: translateY(-1px); }
+.btn-green {
+  background: var(--green);
+  color: #fff;
+}
+.btn-green:hover { background: #1f8549; transform: translateY(-1px); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+ 
+/* ── STATUS TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  background: var(--black);
+  color: #fff;
+  padding: 13px 20px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  transform: translateY(80px);
+  opacity: 0;
+  transition: all 0.3s;
+  z-index: 9999;
+  max-width: 320px;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.ok { background: var(--green); }
+.toast.err { background: var(--red); }
+ 
+/* ── PROGRESS BAR ── */
+.progress-wrap {
+  display: none;
+  margin-top: 16px;
+}
+.progress-wrap.show { display: block; }
+.progress-bar-outer {
+  background: var(--border);
+  border-radius: 6px;
+  height: 8px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+.progress-bar-inner {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-l));
+  border-radius: 6px;
+  width: 0%;
+  transition: width 0.4s ease;
+}
+.progress-label {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+}
+ 
+/* ═══ PDF / PRINT STYLES ═══ */
+@media print {
+  body::before, .header::after { display: none; }
+  body { background: #fff; font-size: 11px; }
+  .header { padding: 24px 20px; background: #0c0c0c !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .intro, .form-wrap { padding: 0 10px; margin: 0 auto; max-width: 100%; }
+  .submit-area, .btn-row, .toast, .progress-wrap { display: none !important; }
+  .section-card { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; margin-bottom: 12px; }
+  .section-head { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .fg input, .fg select, .fg textarea {
+    border: none;
+    background: transparent;
+    padding: 2px 0;
+    font-size: 11px;
+  }
+  .intro-card { border-left: 3px solid #c8922a; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .ck-item { border: 1px solid #ccc; padding: 5px 8px; }
+  .ck-item.checked { background: #f5ede0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .section-body { padding: 14px; }
+  .fg { margin-bottom: 8px; }
+  .checks-grid { grid-template-columns: 1fr 1fr; }
+  .pdf-header-info {
+    display: flex !important;
+    justify-content: space-between;
+    font-size: 10px;
+    color: #888;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+  }
+}
+ 
+/* ── PDF header info (hidden on screen) ── */
+.pdf-header-info { display: none; }
+ 
+/* ── FOOTER ── */
+.footer {
+  text-align: center;
+  padding: 24px;
+  color: var(--muted);
+  font-size: 11px;
+  position: relative;
+  z-index: 1;
+}
+.footer a { color: var(--gold); text-decoration: none; }
+ 
+/* ── REQUIRED STAR ANIMATION ── */
+.fg input:invalid:not(:placeholder-shown),
+.fg textarea:invalid:not(:placeholder-shown) {
+  border-color: var(--red);
+}
+ 
+/* ── CONDITIONAL SECTION ── */
+.conditional-section {
+  display: none;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1.5px dashed var(--border);
+}
+.conditional-section.show { display: block; }
+</style>
+</head>
+<body>
+ 
+<!-- ══ HEADER ══════════════════════════════════════════════════════════════ -->
+<div class="header">
+  <span class="header-flag">🇸🇾</span>
+  <h1>Club des Syriens · Fiche Membre</h1>
+  <p class="sub">Annuaire de notre communauté — France</p>
+  <p class="ar-title">استمارة انتساب الأعضاء · نادي السوريين في فرنسا</p>
+</div>
+ 
+<!-- ══ INTRO ═══════════════════════════════════════════════════════════════ -->
+<div class="intro">
+  <div class="intro-card">
+    <strong>📋 Comment ça marche ?</strong><br>
+    Remplissez ce formulaire avec vos informations. Une fois terminé, vous pouvez :<br>
+    ① <strong>Télécharger votre fiche en PDF</strong> pour la garder ou la partager,<br>
+    ② <strong>Envoyer vos informations</strong> directement à l'équipe du club — elles seront automatiquement ajoutées à notre annuaire partagé.<br><br>
+    <span style="color:var(--red)">*</span> Champs obligatoires · Vos données restent confidentielles au sein du club.
+  </div>
+</div>
+ 
+<!-- ══ FORM ════════════════════════════════════════════════════════════════ -->
+<div class="form-wrap">
+<form id="membre-form" novalidate>
+ 
+  <!-- ── 1. IDENTITÉ ── -->
+  <div class="section-card">
+    <div class="section-head">
+      <span class="ico">👤</span>
+      <h2>Identité</h2>
+      <span class="ar">الهوية الشخصية</span>
+    </div>
+    <div class="section-body">
+      <div class="fg2">
+        <div class="fg">
+          <label>Prénom <span class="req">*</span></label>
+          <input type="text" id="prenom" placeholder="Votre prénom" required>
+        </div>
+        <div class="fg">
+          <label>Nom <span class="req">*</span></label>
+          <input type="text" id="nom" placeholder="Votre nom" required>
+        </div>
+        <div class="fg">
+          <label>Téléphone <span class="req">*</span></label>
+          <input type="tel" id="tel" placeholder="+33 6 XX XX XX XX" required>
+        </div>
+        <div class="fg">
+          <label>Email <span class="req">*</span></label>
+          <input type="email" id="email" placeholder="prenom.nom@email.com" required>
+        </div>
+        <div class="fg">
+          <label>Ville de résidence <span class="req">*</span></label>
+          <input type="text" id="ville" placeholder="Paris, Lyon, Marseille..." required>
+        </div>
+        <div class="fg">
+          <label>LinkedIn</label>
+          <input type="url" id="linkedin" placeholder="https://linkedin.com/in/...">
+          <span class="hint">Optionnel — laissez vide si vous n'en avez pas</span>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- ── 2. PROFIL PROFESSIONNEL ── -->
+  <div class="section-card">
+    <div class="section-head">
+      <span class="ico">💼</span>
+      <h2>Profil professionnel</h2>
+      <span class="ar">المجال المهني</span>
+    </div>
+    <div class="section-body">
+      <div class="fg2">
+        <div class="fg">
+          <label>Situation actuelle <span class="req">*</span></label>
+          <select id="situation" required>
+            <option value="">— Choisir —</option>
+            <option value="Salarié(e)">Salarié(e)</option>
+            <option value="Indépendant(e) / Freelance">Indépendant(e) / Freelance</option>
+            <option value="Chef d'entreprise">Chef d'entreprise</option>
+            <option value="En recherche d'emploi">En recherche d'emploi</option>
+            <option value="Étudiant(e)">Étudiant(e)</option>
+            <option value="Retraité(e)">Retraité(e)</option>
+            <option value="Autre">Autre</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Secteur d'activité</label>
+          <select id="secteur">
+            <option value="">— Choisir —</option>
+            <option>Technologie / IT</option>
+            <option>Finance / Comptabilité</option>
+            <option>Commerce / Vente</option>
+            <option>Santé / Médecine</option>
+            <option>Éducation / Formation</option>
+            <option>Droit / Juridique</option>
+            <option>Marketing / Communication</option>
+            <option>BTP / Immobilier</option>
+            <option>Restauration / Alimentation</option>
+            <option>Arts / Culture / Média</option>
+            <option>Logistique / Transport</option>
+            <option>Industrie / Ingénierie</option>
+            <option>Agriculture</option>
+            <option>Autre</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg" style="margin-top:14px">
+        <label>Décrivez votre métier, poste ou entreprise <span class="req">*</span></label>
+        <textarea id="metier" placeholder="Ex : Je suis développeur web chez une startup parisienne / Je dirige une épicerie syrienne à Lyon / Je suis étudiante en master de droit international..." required></textarea>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- ── 3. PROJET ENTREPRENEURIAL ── -->
+  <div class="section-card">
+    <div class="section-head">
+      <span class="ico">🚀</span>
+      <h2>Projet entrepreneurial</h2>
+      <span class="ar">المشروع الريادي</span>
+    </div>
+    <div class="section-body">
+      <div class="fg">
+        <label>Avez-vous un projet d'entreprise ou une idée à développer ?</label>
+        <div style="display:flex;gap:12px;margin-top:4px;flex-wrap:wrap">
+          <label class="ck-item" id="lbl-projet-oui">
+            <input type="radio" name="has_projet" value="Oui" onchange="toggleProjet(this)">
+            <span class="ck-box"></span>
+            <span class="ck-ico">🚀</span>
+            <span class="ck-label">Oui, j'ai un projet</span>
+          </label>
+          <label class="ck-item" id="lbl-projet-non">
+            <input type="radio" name="has_projet" value="Non" onchange="toggleProjet(this)">
+            <span class="ck-box"></span>
+            <span class="ck-ico">—</span>
+            <span class="ck-label">Pas pour l'instant</span>
+          </label>
+        </div>
+      </div>
+ 
+      <div class="conditional-section" id="projet-details">
+        <div class="fg">
+          <label>Nom du projet ou de l'entreprise</label>
+          <input type="text" id="projet-nom" placeholder="Ex : Rose de Damas SARL, AppSyria, ...">
+        </div>
+        <div class="fg" style="margin-top:14px">
+          <label>Décrivez votre projet en 2-3 phrases <span class="req">*</span></label>
+          <textarea id="projet-desc" placeholder="Quel est le but de votre entreprise ou projet ? Quel problème résout-il ? Qui sont vos clients cibles ?"></textarea>
+          <span class="hint">Ex : « Je développe une plateforme de mise en relation entre artisans syriens et clients français. L'objectif est de valoriser le savoir-faire syrien et créer des débouchés économiques pour notre communauté. »</span>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- ── 4. BESOINS ── -->
+  <div class="section-card" id="section-besoins" style="display:none">
+    <div class="section-head">
+      <span class="ico">🤝</span>
+      <h2>Besoins pour mon projet</h2>
+      <span class="ar">احتياجات المشروع</span>
+    </div>
+    <div class="section-body">
+      <div class="fg">
+        <label>De quoi avez-vous besoin ? <span style="font-weight:400;text-transform:none;letter-spacing:0">(plusieurs choix possibles)</span></label>
+        <div class="checks-grid" style="margin-top:8px">
+          <label class="ck-item" onclick="tglCk(this)">
+            <input type="checkbox" name="besoin" value="Technique (dev, IT, ingénierie)">
+            <span class="ck-box"></span>
+            <span class="ck-ico">💻</span>
+            <span class="ck-label">Soutien technique</span>
+          </label>
+          <label class="ck-item" onclick="tglCk(this)">
+            <input type="checkbox" name="besoin" value="Commercial (vente, réseau clients)">
+            <span class="ck-box"></span>
+            <span class="ck-ico">🤝</span>
+            <span class="ck-label">Soutien commercial</span>
+          </label>
+          <label class="ck-item" onclick="tglCk(this)">
+            <input type="checkbox" name="besoin" value="Logistique (transport, stockage, ops)">
+            <span class="ck-box"></span>
+            <span class="ck-ico">🚚</span>
+            <span class="ck-label">Soutien logistique</span>
+          </label>
+          <label class="ck-item" onclick="tglCk(this)">
+            <input type="checkbox" name="besoin" value="Financier (investissement, prêt)">
+            <span class="ck-box"></span>
+            <span class="ck-ico">💶</span>
+            <span class="ck-label">Soutien financier</span>
+          </label>
+          <label class="ck-item" onclick="tglCk(this)">
+            <input type="checkbox" name="besoin" value="Communication / Marketing">
+            <span class="ck-box"></span>
+            <span class="ck-ico">📣</span>
+            <span class="ck-label">Communication / Marketing</span>
+          </label>
+          <label class="ck-item" onclick="tglCk(this)">
+            <input type="checkbox" name="besoin" value="Juridique / Administratif">
+            <span class="ck-box"></span>
+            <span class="ck-ico">⚖️</span>
+            <span class="ck-label">Juridique / Administratif</span>
+          </label>
+          <label class="ck-item" onclick="tglCk(this)">
+            <input type="checkbox" name="besoin" value="Réseau / Contacts / Partenaires">
+            <span class="ck-box"></span>
+            <span class="ck-ico">🌐</span>
+            <span class="ck-label">Réseau / Contacts</span>
+          </label>
+          <label class="ck-item" onclick="tglCk(this)">
+            <input type="checkbox" name="besoin" value="Mentorat / Conseil">
+            <span class="ck-box"></span>
+            <span class="ck-ico">🎓</span>
+            <span class="ck-label">Mentorat / Conseil</span>
+          </label>
+        </div>
+      </div>
+      <div class="fg" style="margin-top:16px">
+        <label>Précisions sur vos besoins</label>
+        <textarea id="besoin-detail" placeholder="Décrivez plus précisément ce que vous cherchez, ou ajoutez d'autres besoins non listés ci-dessus..."></textarea>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- ── 5. COMMENT AIDER LA COMMUNAUTÉ ── -->
+  <div class="section-card">
+    <div class="section-head">
+      <span class="ico">💡</span>
+      <h2>Ce que j'apporte à la communauté</h2>
+      <span class="ar">ما أقدمه للمجتمع</span>
+    </div>
+    <div class="section-body">
+      <div class="fg">
+        <label>Comment pouvez-vous aider les autres membres ?</label>
+        <textarea id="contribution" placeholder="Ex : Je peux aider les membres qui cherchent un emploi dans l'IT. Je peux offrir des conseils comptables gratuits. Je connais des investisseurs dans mon réseau. Je peux héberger des événements dans ma salle..."></textarea>
+        <span class="hint">Compétences, réseau, ressources, temps... tout compte !</span>
+      </div>
+      <div class="fg" style="margin-top:14px">
+        <label>Message libre pour la communauté</label>
+        <textarea id="message" placeholder="Un mot de présentation, une anecdote, un message d'espoir... (optionnel)"></textarea>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- ── INFO PDF (caché à l'écran, visible en PDF) ── -->
+  <div class="pdf-header-info" id="pdf-meta">
+    <span>Club des Syriens · Fiche Membre</span>
+    <span id="pdf-date"></span>
+  </div>
+ 
+  <!-- ── SUBMIT ── -->
+  <div class="submit-area">
+    <h3>Tout est prêt ? 🎉</h3>
+    <p>Choisissez comment partager votre fiche avec le club</p>
+ 
+    <div class="btn-row">
+      <button type="button" class="btn btn-black" onclick="exportPDF()">
+        🖨️ Télécharger en PDF
+      </button>
+      <button type="button" class="btn btn-gold" id="btn-send" onclick="submitForm()">
+        📨 Envoyer au club
+      </button>
+    </div>
+ 
+    <div class="progress-wrap" id="progress-wrap">
+      <div class="progress-bar-outer">
+        <div class="progress-bar-inner" id="progress-bar"></div>
+      </div>
+      <div class="progress-label" id="progress-label">Envoi en cours...</div>
+    </div>
+  </div>
+ 
+</form>
+</div>
+ 
+<!-- ══ FOOTER ══════════════════════════════════════════════════════════════ -->
+<div class="footer">
+  🇸🇾 Club des Syriens · France ·
+  <a href="mailto:safwanst.76@gmail.com">safwanst.76@gmail.com</a> ·
+  Vos données sont confidentielles et réservées aux membres du club
+</div>
+ 
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+ 
+<!-- ══ SCRIPTS ══════════════════════════════════════════════════════════════ -->
+<script>
+ 
+// ═══════════════════════════════════════════════════════════════════════════
+// ⚙️ CONFIGURATION — À MODIFIER UNE SEULE FOIS
+// ═══════════════════════════════════════════════════════════════════════════
+ 
+// 1️⃣  URL de ton Google Apps Script (voir instructions dans le README ci-dessous)
+//     Une fois créé, colle l'URL ici :
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw16U7EP6oneXXMhz1aro63eKt5N9cP2dHvd6LYqr7H3nVhNznt9yS9zHw5C9gm266Tfw/exec';
+ 
+// 2️⃣  Email de destination (déjà configuré)
+const ADMIN_EMAIL = 'safwanst.76@gmail.com';
+ 
+// ═══════════════════════════════════════════════════════════════════════════
+ 
+// ── Checkbox toggle ──────────────────────────────────────────────────────
+function tglCk(label) {
+  const cb = label.querySelector('input[type=checkbox]');
+  // Don't toggle here — let the browser handle it, just update style
+  setTimeout(() => {
+    label.classList.toggle('checked', cb.checked);
+    const box = label.querySelector('.ck-box');
+    if (box) box.style.background = cb.checked ? 'var(--gold)' : '';
+  }, 0);
+}
+ 
+// ── Radio projet toggle ──────────────────────────────────────────────────
+function toggleProjet(radio) {
+  const details = document.getElementById('projet-details');
+  const besoins = document.getElementById('section-besoins');
+  const oui = document.querySelector('input[name=has_projet][value=Oui]');
+  const non = document.querySelector('input[name=has_projet][value=Non]');
+ 
+  // Update radio styling
+  document.getElementById('lbl-projet-oui').classList.toggle('checked', oui.checked);
+  document.getElementById('lbl-projet-non').classList.toggle('checked', non.checked);
+  document.querySelectorAll('input[name=has_projet]').forEach(r => {
+    const box = r.parentElement.querySelector('.ck-box');
+    if (box) box.style.background = r.checked ? 'var(--gold)' : '';
+  });
+ 
+  if (radio.value === 'Oui') {
+    details.classList.add('show');
+    besoins.style.display = 'block';
+    setTimeout(() => besoins.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+  } else {
+    details.classList.remove('show');
+    besoins.style.display = 'none';
+  }
+}
+ 
+// ── Toast ────────────────────────────────────────────────────────────────
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type ? ' ' + type : '');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 4500);
+}
+ 
+// ── Progress bar ─────────────────────────────────────────────────────────
+function setProgress(pct, label) {
+  document.getElementById('progress-wrap').classList.add('show');
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = label;
+}
+ 
+// ── Collect form data ─────────────────────────────────────────────────────
+function collectData() {
+  const besoins = [...document.querySelectorAll('input[name=besoin]:checked')]
+    .map(c => c.value).join(', ');
+  const hasProjet = document.querySelector('input[name=has_projet]:checked')?.value || 'Non renseigné';
+ 
+  return {
+    timestamp:     new Date().toLocaleString('fr-FR'),
+    prenom:        document.getElementById('prenom').value.trim(),
+    nom:           document.getElementById('nom').value.trim(),
+    tel:           document.getElementById('tel').value.trim(),
+    email:         document.getElementById('email').value.trim(),
+    ville:         document.getElementById('ville').value.trim(),
+    linkedin:      document.getElementById('linkedin').value.trim() || '—',
+    situation:     document.getElementById('situation').value,
+    secteur:       document.getElementById('secteur').value || '—',
+    metier:        document.getElementById('metier').value.trim(),
+    has_projet:    hasProjet,
+    projet_nom:    document.getElementById('projet-nom').value.trim() || '—',
+    projet_desc:   document.getElementById('projet-desc').value.trim() || '—',
+    besoins:       besoins || '—',
+    besoin_detail: document.getElementById('besoin-detail').value.trim() || '—',
+    contribution:  document.getElementById('contribution').value.trim() || '—',
+    message:       document.getElementById('message').value.trim() || '—',
+  };
+}
+ 
+// ── Validate ──────────────────────────────────────────────────────────────
+function validate(data) {
+  if (!data.prenom) return 'Prénom manquant';
+  if (!data.nom)    return 'Nom manquant';
+  if (!data.tel)    return 'Téléphone manquant';
+  if (!data.email || !data.email.includes('@')) return 'Email invalide';
+  if (!data.ville)  return 'Ville manquante';
+  if (!data.situation) return 'Veuillez indiquer votre situation professionnelle';
+  if (!data.metier) return 'Veuillez décrire votre métier';
+  return null;
+}
+ 
+// ── Export PDF ────────────────────────────────────────────────────────────
+function exportPDF() {
+  const data = collectData();
+  const err = validate(data);
+  if (err) { showToast('⚠️ ' + err, 'err'); return; }
+ 
+  // Update PDF meta
+  document.getElementById('pdf-date').textContent =
+    'Généré le ' + new Date().toLocaleDateString('fr-FR');
+ 
+  showToast('📄 Ouverture de l\'impression…');
+  setTimeout(() => window.print(), 400);
+}
+ 
+// ── Submit to Google Sheets + Email ──────────────────────────────────────
+async function submitForm() {
+  const data = collectData();
+  const err = validate(data);
+  if (err) { showToast('⚠️ ' + err, 'err'); return; }
+ 
+  const btn = document.getElementById('btn-send');
+  btn.disabled = true;
+  btn.textContent = '⏳ Envoi…';
+ 
+  setProgress(20, '① Préparation des données…');
+ 
+  // ── Build email body ─────────────────────────────────────────────────
+  const emailBody = buildEmailBody(data);
+ 
+  try {
+    setProgress(50, '② Envoi vers Google Sheets…');
+ 
+    // Check if script URL is configured
+    if (GOOGLE_SCRIPT_URL.includes('REMPLACE_PAR')) {
+      // Mode démo : simuler l'envoi
+      await new Promise(r => setTimeout(r, 1500));
+      setProgress(100, '✅ Envoyé ! (mode démo — configurer l\'URL Apps Script)');
+      showToast('✅ Fiche enregistrée ! (mode démo)', 'ok');
+      btn.textContent = '✅ Envoyé !';
+      btn.style.background = 'var(--green)';
+ 
+      // Still try to open email client as fallback
+      openMailFallback(data, emailBody);
+      return;
+    }
+ 
+    // Real submission
+    const formData = new FormData();
+    Object.entries(data).forEach(([k, v]) => formData.append(k, v));
+    formData.append('admin_email', ADMIN_EMAIL);
+ 
+    const res = await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      body: formData,
+    });
+ 
+    setProgress(90, '③ Confirmation…');
+    await new Promise(r => setTimeout(r, 600));
+    setProgress(100, '✅ Fiche enregistrée avec succès !');
+ 
+    showToast('✅ Fiche envoyée et enregistrée dans l\'annuaire !', 'ok');
+    btn.textContent = '✅ Envoyé !';
+    btn.style.background = 'var(--green)';
+ 
+  } catch (e) {
+    console.error('[Submit]', e);
+    setProgress(0, '');
+    document.getElementById('progress-wrap').classList.remove('show');
+    showToast('⚠️ Erreur réseau — ouverture de votre messagerie…', 'err');
+    openMailFallback(data, emailBody);
+    btn.disabled = false;
+    btn.textContent = '📨 Réessayer';
+  }
+}
+ 
+// ── Fallback : ouvrir le client mail ─────────────────────────────────────
+function openMailFallback(data, body) {
+  const subject = encodeURIComponent(
+    `[Club Syriens] Nouvelle fiche membre — ${data.prenom} ${data.nom}`
+  );
+  const bodyEnc = encodeURIComponent(body);
+  const mailto = `mailto:${ADMIN_EMAIL}?subject=${subject}&body=${bodyEnc}`;
+  // mailto has length limits — open in new tab as safety
+  const a = document.createElement('a');
+  a.href = mailto;
+  a.click();
+}
+ 
+// ── Build email text body ─────────────────────────────────────────────────
+function buildEmailBody(d) {
+  return `NOUVELLE FICHE MEMBRE — CLUB DES SYRIENS
+Soumise le : ${d.timestamp}
+${'═'.repeat(50)}
+ 
+👤 IDENTITÉ
+Prénom / Nom  : ${d.prenom} ${d.nom}
+Téléphone     : ${d.tel}
+Email         : ${d.email}
+Ville         : ${d.ville}
+LinkedIn      : ${d.linkedin}
+ 
+💼 PROFIL PROFESSIONNEL
+Situation     : ${d.situation}
+Secteur       : ${d.secteur}
+Description   : ${d.metier}
+ 
+🚀 PROJET ENTREPRENEURIAL
+A un projet   : ${d.has_projet}
+Nom projet    : ${d.projet_nom}
+Description   : ${d.projet_desc}
+ 
+🤝 BESOINS
+Types         : ${d.besoins}
+Précisions    : ${d.besoin_detail}
+ 
+💡 CONTRIBUTION À LA COMMUNAUTÉ
+Comment aider : ${d.contribution}
+ 
+💬 MESSAGE
+${d.message}
+ 
+${'═'.repeat(50)}
+Formulaire · Club des Syriens · France
+`;
+}
+ 
+// ── Init ──────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('pdf-date').textContent =
+    'Généré le ' + new Date().toLocaleDateString('fr-FR');
+});
+ 
+</script>
